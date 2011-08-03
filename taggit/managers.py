@@ -155,8 +155,8 @@ class _TaggableManager(models.Manager):
     @require_instance_manager
     def add(self, *tags):
         str_tags = set([
-            t
-            for t in tags
+            (t,l)
+            for t,l in tags
             if not isinstance(t, self.through.tag_model())
         ])
         tag_objs = set(tags) - str_tags
@@ -167,8 +167,8 @@ class _TaggableManager(models.Manager):
         )
         tag_objs.update(existing)
 
-        for new_tag in str_tags - set(t.name for t in existing):
-            tag_objs.add(self.through.tag_model().objects.create(name=new_tag))
+        for new_tag, lang in str_tags - set((t.name, t.lang) for t in existing):
+            tag_objs.add(self.through.tag_model().objects.create(name=new_tag, lang=lang))
 
         for tag in tag_objs:
             self.through.objects.get_or_create(tag=tag, **self._lookup_kwargs())

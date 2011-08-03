@@ -4,10 +4,11 @@ from django.contrib.contenttypes.generic import GenericForeignKey
 from django.db import models, IntegrityError, transaction
 from django.template.defaultfilters import slugify as default_slugify
 from django.utils.translation import ugettext_lazy as _, ugettext
-
+from django.conf import settings
 
 class TagBase(models.Model):
     name = models.CharField(verbose_name=_('Name'), max_length=100)
+    lang = models.CharField(verbose_name=_('Language'), max_length=20, choices=settings.LANGUAGES)
     slug = models.SlugField(verbose_name=_('Slug'), unique=True, max_length=100)
 
     def __unicode__(self):

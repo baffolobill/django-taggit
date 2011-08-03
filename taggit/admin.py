@@ -7,7 +7,7 @@ class TaggedItemInline(admin.StackedInline):
     model = TaggedItem
 
 class TagAdmin(admin.ModelAdmin):
-    list_display = ["name"]
+    list_display = ["name", 'lang']
     inlines = [
         TaggedItemInline
     ]
