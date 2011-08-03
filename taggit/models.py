@@ -1,3 +1,4 @@
+from unidecode import unidecode
 import django
 from django.contrib.contenttypes.models import ContentType
 from django.contrib.contenttypes.generic import GenericForeignKey
@@ -46,7 +47,7 @@ class TagBase(models.Model):
             return super(TagBase, self).save(*args, **kwargs)
 
     def slugify(self, tag, i=None):
-        slug = default_slugify(tag)
+        slug = default_slugify(unidecode(tag))
         if i is not None:
             slug += "_%d" % i
         return slug
