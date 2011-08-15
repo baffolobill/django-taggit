@@ -11,7 +11,6 @@ class TagBase(models.Model):
     name = models.CharField(verbose_name=_('Name'), max_length=100)
     lang = models.CharField(verbose_name=_('Language'), max_length=20, choices=settings.LANGUAGES)
     slug = models.SlugField(verbose_name=_('Slug'), unique=True, max_length=100)
-    base = models.ForeignKey('self', blank=True, null=True, editable=False)
 
     def __unicode__(self):
         return self.name

@@ -11,7 +11,6 @@ class TagBase(models.Model):
     name = models.CharField(verbose_name=_('Name'), max_length=100)
     lang = models.CharField(verbose_name=_('Language'), max_length=20, choices=settings.LANGUAGES)
     slug = models.SlugField(verbose_name=_('Slug'), unique=True, max_length=100)
-    base = models.ForeignKey('self', blank=True, null=True, editable=False)
 
     def __unicode__(self):
         return self.name
@@ -21,7 +20,7 @@ class TagBase(models.Model):
 
     def save(self, *args, **kwargs):
         if not self.pk and not self.slug:
-            self.slug = self.slugify(self.name)
+            self.slug = self.slugify(unidecode(self.name))
             if django.VERSION >= (1, 2):
                 from django.db import router
                 using = kwargs.get("using") or router.db_for_write(
@@ -48,7 +47,7 @@ class TagBase(models.Model):
             return super(TagBase, self).save(*args, **kwargs)
 
     def slugify(self, tag, i=None):
-        slug = default_slugify(unidecode(tag))
+        slug = default_slugify(tag)
         if i is not None:
             slug += "_%d" % i
         return slug
